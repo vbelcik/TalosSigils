@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalosSigils", "TalosSigils\TalosSigils.csproj", "{133E147D-8F46-4EBB-A3FD-6D04BA7EDF41}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{133E147D-8F46-4EBB-A3FD-6D04BA7EDF41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{133E147D-8F46-4EBB-A3FD-6D04BA7EDF41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{133E147D-8F46-4EBB-A3FD-6D04BA7EDF41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{133E147D-8F46-4EBB-A3FD-6D04BA7EDF41}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4E57210-6D74-4428-9D1D-D392BA163A7B}
+	EndGlobalSection
+EndGlobal
