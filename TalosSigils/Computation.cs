@@ -64,14 +64,14 @@ namespace TalosSigils
 
                     if (!p2.FindNextFreePlaceXY(prevPutting: p))
                     {
-                        // hooray, solution
-                        return true;
+                        // whole board is filled
+                        return true;    // hooray, solution
                     }
 
                     if (!p2.FirstTrial())
                     {
                         // we have nothing to fill the free place
-                        return false;
+                        return false;   // no solution
                     }
 
                     p = p2;
@@ -92,6 +92,7 @@ namespace TalosSigils
                     }
                     else
                     {
+                        // whole state space has been exhausted
                         return false;   // no solution
                     }
                 }
