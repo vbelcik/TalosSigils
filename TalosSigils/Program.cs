@@ -24,7 +24,7 @@ namespace TalosSigils
 
                 if (args.Length != 1)
                 {
-                    throw new Exception("One argument expected: the input text file-path");
+                    throw new Exception("One argument expected: the input text file path");
                 }
 
                 Script(path: args[0]);
@@ -142,8 +142,8 @@ usage: TalosSigils.exe [--no-pause] <input.txt>
     --no-pause ..... does not wait for a key press at the end (optional)
     <input.txt> .... path to a text file with description of a puzzle
 
-    Note: The result will be printed on the screen and also
-          to the file <input.txt>.solution.txt
+    Note: The solution will be printed on the screen and also
+          written to a text file <input.txt>.solution.txt
 ";
     }
 }
