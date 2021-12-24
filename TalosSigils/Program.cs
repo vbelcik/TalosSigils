@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -59,21 +60,21 @@ namespace TalosSigils
                 ProgressInterval = TimeSpan.FromSeconds(1)
             };
 
-            bool ok = comp.Solve();
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            bool success = comp.Solve();
+
+            stopwatch.Stop();
 
             PrintBoardDraft(board);
 
-            if (ok)
-            {
-                text = BoardDrawing.TextFromBoard(board)
-                    .Append("")
-                    .Append("Status: OK")
-                    .ToArray();
-            }
-            else
-            {
-                text = new[] { "Status: No solution" };
-            }
+            text = success ? BoardDrawing.TextFromBoard(board) : Array.Empty<string>();
+
+            text = text
+                .Append("")
+                .Append("Status: " + (success ? "Solution found" : "No solution"))
+                .Append("Duration: " + FormatDuration(stopwatch.Elapsed))
+                .ToArray();
 
             PrintText(text);
 
@@ -123,6 +124,13 @@ namespace TalosSigils
             {
                 Console.WriteLine(line);
             }
+        }
+
+        private static string FormatDuration(TimeSpan duration)
+        {
+            return (duration >= TimeSpan.FromSeconds(20))
+                ? $"{(long)duration.TotalSeconds} seconds"
+                : $"{(long)duration.TotalMilliseconds} ms";
         }
 
         private static bool RemoveFlagArg(ref string[] args, string flag)
