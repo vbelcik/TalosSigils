@@ -48,7 +48,7 @@ namespace TalosSigils
         private static void Script(string path)
         {
             Console.WriteLine();
-            Console.WriteLine("The Talos Sigils Solver");
+            Console.WriteLine("The Talos Sigils Puzzle Solver");
 
             string[] text = File.ReadAllLines(path: path);
 
@@ -75,7 +75,6 @@ namespace TalosSigils
                 text = new[] { "Status: No solution" };
             }
 
-            Console.WriteLine();
             PrintText(text);
 
             string slnPath = path + ".solution.txt";
@@ -91,7 +90,6 @@ namespace TalosSigils
             PrintBoardDraft(board);
 
             // statistics
-            Console.WriteLine();
             Console.WriteLine($"freq = {freq:E2} Hz");
         }
 
@@ -115,6 +113,8 @@ namespace TalosSigils
 
                 Console.WriteLine(new string(ar));
             }
+
+            Console.WriteLine();
         }
 
         private static void PrintText(string[] text)
