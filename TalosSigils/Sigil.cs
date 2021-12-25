@@ -14,7 +14,7 @@ namespace TalosSigils
 
         public Sigil(int index, (int, int)[] points)
         {
-            this.BoardChar = BoardCharFromIndex(index: index);
+            this.BoardChar = BoardCharFromSigilIndex(index: index);
 
             // 4 orientations
             (int, int)[][] rotPoints = new (int, int)[4][];
@@ -39,7 +39,7 @@ namespace TalosSigils
         }
 
         // we are limited to 62 sigils (a..z, A..Z, 0..9)
-        private static char BoardCharFromIndex(int index)
+        private static char BoardCharFromSigilIndex(int index)
         {
             if (index < 0)
             {
@@ -131,15 +131,15 @@ namespace TalosSigils
 
             public int GetHashCode([DisallowNull] (int, int)[] obj)
             {
-                var hc = new HashCode();
+                var hash = new HashCode();
 
                 foreach ((int x, int y) in obj)
                 {
-                    hc.Add(x);
-                    hc.Add(y);
+                    hash.Add(x);
+                    hash.Add(y);
                 }
 
-                return hc.ToHashCode();
+                return hash.ToHashCode();
             }
         }
     }
