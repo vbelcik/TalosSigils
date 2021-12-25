@@ -14,7 +14,7 @@ namespace TalosSigils
 
         public Sigil(int index, (int, int)[] points)
         {
-            this.BoardChar = (char)('a' + index);
+            this.BoardChar = BoardCharFromIndex(index: index);
 
             // 4 orientations
             (int, int)[][] rotPoints = new (int, int)[4][];
@@ -23,7 +23,7 @@ namespace TalosSigils
 
             for (int i = 1; i < rotPoints.Length; i++)
             {
-                rotPoints[i] = Array.ConvertAll(rotPoints[i - 1], Rotate);
+                rotPoints[i] = Array.ConvertAll(rotPoints[i - 1], Rotate90);
             }
 
             foreach ((int, int)[] ps in rotPoints)
@@ -38,7 +38,42 @@ namespace TalosSigils
             this.OrientPoints = rotPoints;
         }
 
-        private static (int, int) Rotate((int, int) p)
+        // we are limited to 62 sigils (a..z, A..Z, 0..9)
+        private static char BoardCharFromIndex(int index)
+        {
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            const int letterCnt = 'z' - 'a' + 1;
+
+            if (index < letterCnt)
+            {
+                return (char)('a' + index);
+            }
+
+            index -= letterCnt;
+
+            if (index < letterCnt)
+            {
+                return (char)('A' + index);
+            }
+
+            index -= letterCnt;
+
+            if (index < 10)
+            {
+                return (char)('0' + index);
+            }
+
+            throw new Exception("Too many sigils");
+        }
+
+        /// <summary>
+        /// coords rotation by 90 deg
+        /// </summary>
+        private static (int, int) Rotate90((int, int) p)
         {
             (int x, int y) = p;
             return (-y, x);
