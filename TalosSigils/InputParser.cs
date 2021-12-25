@@ -33,6 +33,8 @@ namespace TalosSigils
         {
             try
             {
+                dimSection = dimSection.Where(ln => !string.IsNullOrWhiteSpace(ln)).ToArray();
+
                 string str_dim = dimSection[0];
                 string[] strArr_dim = str_dim.Split('*');
 
