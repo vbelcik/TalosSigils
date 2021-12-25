@@ -23,6 +23,8 @@ namespace TalosSigils
             for (int y = 0; y < dy; y++)
             {
                 m_array[y] = new char[dx];
+
+                Array.Fill(m_array[y], ' ');
             }
 
             PrintEmptyBoard();
