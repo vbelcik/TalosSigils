@@ -13,19 +13,7 @@ namespace TalosSigils
         private BoardDrawing(Board board)
         {
             m_board = board;
-
-            (int dx, int dy) = GetSquareBase(board.Dim_x, board.Dim_y);
-            dx++;
-            dy++;
-
-            m_array = new char[dy][];
-
-            for (int y = 0; y < dy; y++)
-            {
-                m_array[y] = new char[dx];
-
-                Array.Fill(m_array[y], ' ');
-            }
+            m_array = CreateSurface(board);
 
             PrintEmptyBoard();
             GlueSigils();
@@ -40,6 +28,24 @@ namespace TalosSigils
         private string[] GetText()
         {
             return m_array.Select(chrs => new string(chrs)).ToArray();
+        }
+
+        private static char[][] CreateSurface(Board board)
+        {
+            (int dx, int dy) = GetSquareBase(board.Dim_x, board.Dim_y);
+            dx++;
+            dy++;
+
+            char[][] array = new char[dy][];
+
+            for (int y = 0; y < dy; y++)
+            {
+                array[y] = new char[dx];
+
+                Array.Fill(array[y], ' ');
+            }
+
+            return array;
         }
 
         private void PrintEmptyBoard()
