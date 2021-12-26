@@ -1,0 +1,44 @@
+7*8
+----
+xx
+ xx
+----
+xx
+ xx
+----
+ x
+xxx
+----
+ x
+xxx
+----
+x
+xxx
+----
+x
+xxx
+----
+x
+xxx
+----
+x
+xxx
+----
+x
+xxx
+----
+  x
+xxx
+----
+  x
+xxx
+----
+  x
+xxx
+----
+  x
+xxx
+----
+xx
+xx
+----
