@@ -12,7 +12,7 @@ namespace TalosSigils
         readonly char[] m_array;
 
         public readonly Sigil[] Sigils;
-        public readonly bool[] SigilUsed;
+        public readonly int[] SigilUseCount;
 
         public Board(int dx, int dy, Sigil[] sigils)
         {
@@ -20,7 +20,7 @@ namespace TalosSigils
             this.Dim_y = dy;
 
             this.Sigils = sigils;
-            this.SigilUsed = new bool[sigils.Length];
+            this.SigilUseCount = new int[sigils.Length];
 
             m_array = new char[dx * dy];
 

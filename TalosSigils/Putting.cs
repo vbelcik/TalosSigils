@@ -62,9 +62,9 @@ namespace TalosSigils
 
         private bool FindNextFreeSigil()
         {
-            while (m_sigilIdx < m_board.SigilUsed.Length)
+            while (m_sigilIdx < m_board.SigilUseCount.Length)
             {
-                if (!m_board.SigilUsed[m_sigilIdx])
+                if (m_board.SigilUseCount[m_sigilIdx] < m_board.Sigils[m_sigilIdx].BoardChars.Length)
                 {
                     return true;
                 }
@@ -118,24 +118,22 @@ namespace TalosSigils
 
         public bool CanPutSigil()
         {
-            return WholeSigil(clear: false, test: true);
+            return WholeSigil(clear: false, test: true, sigilBoardCharIdx: 0);
         }
 
         public void PutSigil()
         {
-            WholeSigil(clear: false, test: false);
-
-            m_board.SigilUsed[m_sigilIdx] = true;
+            WholeSigil(clear: false, test: false, 
+                sigilBoardCharIdx: m_board.SigilUseCount[m_sigilIdx]++);
         }
 
         public void TakeSigil()
         {
-            WholeSigil(clear: true, test: false);
-
-            m_board.SigilUsed[m_sigilIdx] = false;
+            WholeSigil(clear: true, test: false,
+                sigilBoardCharIdx: --m_board.SigilUseCount[m_sigilIdx]);
         }
 
-        private bool WholeSigil(bool clear, bool test)
+        private bool WholeSigil(bool clear, bool test, int sigilBoardCharIdx)
         {
             Board board = m_board;
 
@@ -149,7 +147,7 @@ namespace TalosSigils
             int ofs_x = -cx + m_x;
             int ofs_y = -cy + m_y;
 
-            char sigilChar = sigil.BoardChars[0];
+            char sigilChar = sigil.BoardChars[sigilBoardCharIdx];
 
             foreach ((int x, int y) in points)
             {
