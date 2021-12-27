@@ -7,7 +7,7 @@ namespace TalosSigils
     static class SigilMerger
     {
         /// <summary>
-        /// Merges same sigils into one with "count"
+        /// Merges same sigils into one with summed "count"
         /// </summary>
         public static Sigil[] Merge(Sigil[] sigils)
         {
