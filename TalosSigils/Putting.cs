@@ -149,7 +149,7 @@ namespace TalosSigils
             int ofs_x = -cx + m_x;
             int ofs_y = -cy + m_y;
 
-            char sigilChar = sigil.BoardChar;
+            char sigilChar = sigil.BoardChars[0];
 
             foreach ((int x, int y) in points)
             {

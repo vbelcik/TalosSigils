@@ -21,10 +21,12 @@ namespace TalosSigils
 
             Sigil[] sigils = sections
                 .Skip(1)
-                .Select((p, i) => ParseSigil(index: i, pattern: p))
+                .Select(p => ParseSigil(pattern: p))
                 .Where(s => s != null)
                 .Cast<Sigil>()
                 .ToArray();
+
+            SetSigilBoardChars(sigils);
 
             return new Board(dx: dim_x, dy: dim_y, sigils);
         }
@@ -54,7 +56,7 @@ namespace TalosSigils
             }
         }
 
-        private static Sigil? ParseSigil(int index, string[] pattern)
+        private static Sigil? ParseSigil(string[] pattern)
         {
             (int, int)[] points = ParseSigilPoints(pattern: pattern);
 
@@ -64,7 +66,7 @@ namespace TalosSigils
                 return null;
             }
 
-            return new Sigil(index: index, points: points);
+            return new Sigil(points: points, count: 1);
         }
 
         private static (int, int)[] ParseSigilPoints(string[] pattern)
@@ -85,6 +87,17 @@ namespace TalosSigils
             }
 
             return lst.ToArray();
+        }
+
+        private static void SetSigilBoardChars(Sigil[] sigils)
+        {
+            int index = 0;
+
+            foreach (Sigil sigil in sigils)
+            {
+                sigil.SetBoardChars(firstSigilIndex: index);
+                index += sigil.BoardChars.Length;
+            }
         }
 
         private static string[][] SplitText(string[] text)

@@ -9,13 +9,29 @@ namespace TalosSigils
 {
     sealed class Sigil
     {
-        public readonly char BoardChar;
         public readonly (int, int)[][] OrientPoints;
+        public readonly char[] BoardChars;
 
-        public Sigil(int index, (int, int)[] points)
+        private Sigil((int, int)[][] orientPoints, int count)
         {
-            this.BoardChar = BoardCharFromSigilIndex(index: index);
+            this.OrientPoints = orientPoints;
+            this.BoardChars = new char[count];
 
+            Array.Fill(this.BoardChars, '*');   // '*' some dummy char for now
+        }
+
+        public Sigil((int, int)[] points, int count)
+            : this(orientPoints: MakeOrientPoints(points: points), count: count)
+        {
+        }
+
+        public Sigil WithCount(int count)
+        {
+            return new Sigil(orientPoints: this.OrientPoints, count: count);
+        }
+
+        private static (int, int)[][] MakeOrientPoints((int, int)[] points)
+        {
             // 4 orientations
             (int, int)[][] rotPoints = new (int, int)[4][];
 
@@ -35,39 +51,7 @@ namespace TalosSigils
             // e.g. all orientations of a square are identical => 1 remain
             rotPoints = rotPoints.Distinct(new PointArrayEqComparer()).ToArray();
 
-            this.OrientPoints = rotPoints;
-        }
-
-        // we are limited to 62 sigils (a..z, A..Z, 0..9)
-        private static char BoardCharFromSigilIndex(int index)
-        {
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            const int letterCnt = 'z' - 'a' + 1;
-
-            if (index < letterCnt)
-            {
-                return (char)('a' + index);
-            }
-
-            index -= letterCnt;
-
-            if (index < letterCnt)
-            {
-                return (char)('A' + index);
-            }
-
-            index -= letterCnt;
-
-            if (index < 10)
-            {
-                return (char)('0' + index);
-            }
-
-            throw new Exception("Too many sigils");
+            return rotPoints;
         }
 
         /// <summary>
@@ -107,6 +91,46 @@ namespace TalosSigils
 
                 return Comparer<int>.Default.Compare(a.x, b.x);
             }
+        }
+
+        public void SetBoardChars(int firstSigilIndex)
+        {
+            for (int i = 0; i < this.BoardChars.Length; i++)
+            {
+                this.BoardChars[i] = BoardCharFromSigilIndex(index: firstSigilIndex + i);
+            }
+        }
+
+        // we are limited to 62 sigils (a..z, A..Z, 0..9)
+        private static char BoardCharFromSigilIndex(int index)
+        {
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            const int letterCnt = 'z' - 'a' + 1;
+
+            if (index < letterCnt)
+            {
+                return (char)('a' + index);
+            }
+
+            index -= letterCnt;
+
+            if (index < letterCnt)
+            {
+                return (char)('A' + index);
+            }
+
+            index -= letterCnt;
+
+            if (index < 10)
+            {
+                return (char)('0' + index);
+            }
+
+            throw new Exception("Too many sigils");
         }
 
         private sealed class PointArrayEqComparer : IEqualityComparer<(int, int)[]>
