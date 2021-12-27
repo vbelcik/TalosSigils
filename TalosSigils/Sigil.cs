@@ -9,6 +9,8 @@ namespace TalosSigils
 {
     sealed class Sigil
     {
+        static readonly PointArrayEqComparer s_pointArrayEqComparer = new();
+
         public readonly (int, int)[][] OrientPoints;
         public readonly char[] BoardChars;
 
@@ -49,7 +51,7 @@ namespace TalosSigils
             }
 
             // e.g. all orientations of a square are identical => 1 remain
-            rotPoints = rotPoints.Distinct(new PointArrayEqComparer()).ToArray();
+            rotPoints = rotPoints.Distinct(s_pointArrayEqComparer).ToArray();
 
             return rotPoints;
         }
@@ -131,6 +133,25 @@ namespace TalosSigils
             }
 
             throw new Exception("Too many sigils");
+        }
+
+        public bool IsSameAs(Sigil other)
+        {
+            // pick one orientation
+            (int, int)[] thisPoints = this.OrientPoints[0];
+
+            // iterate through all orientations
+            foreach ((int, int)[] otherPoints in other.OrientPoints)
+            {
+                if (s_pointArrayEqComparer.Equals(thisPoints, otherPoints))
+                {
+                    // one match is enough
+                    // the sigils represent the same sigil pattern
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private sealed class PointArrayEqComparer : IEqualityComparer<(int, int)[]>

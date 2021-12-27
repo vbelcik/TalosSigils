@@ -8,7 +8,7 @@ namespace TalosSigils
 {
     static class InputParser
     {
-        public static Board Parse(string[] text)
+        public static Board Parse(string[] text, bool mergeSigils)
         {
             string[][] sections = SplitText(text);
 
@@ -25,6 +25,11 @@ namespace TalosSigils
                 .Where(s => s != null)
                 .Cast<Sigil>()
                 .ToArray();
+
+            if (mergeSigils)
+            {
+                sigils = SigilMerger.Merge(sigils);
+            }
 
             SetSigilBoardChars(sigils);
 

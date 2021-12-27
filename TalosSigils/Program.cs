@@ -18,17 +18,19 @@ namespace TalosSigils
             //string path = @"C:\Users\Vlado\Desktop\zadanie.txt";
 
             bool? noPause = null;
+            bool noMerge;
 
             try
             {
                 noPause = RemoveFlagArg(args: ref args, flag: "--no-pause");
+                noMerge = RemoveFlagArg(args: ref args, flag: "--no-merge");
 
                 if (args.Length != 1)
                 {
                     throw new Exception("One argument expected: the input text file path");
                 }
 
-                Script(path: args[0]);
+                Script(path: args[0], mergeSigils: !noMerge);
             }
             catch (Exception ex) when (mainCatch)
             {
@@ -46,14 +48,14 @@ namespace TalosSigils
             }
         }
 
-        private static void Script(string path)
+        private static void Script(string path, bool mergeSigils)
         {
             Console.WriteLine();
             Console.WriteLine("The Talos Sigils Puzzle Solver");
 
             string[] text = File.ReadAllLines(path: path);
 
-            Board board = InputParser.Parse(text: text);
+            Board board = InputParser.Parse(text: text, mergeSigils: mergeSigils);
 
             var comp = new Computation(board, progressAction: DisplayProgress)
             {
@@ -145,9 +147,10 @@ namespace TalosSigils
         }
 
         const string HelpText = @"
-usage: TalosSigils.exe [--no-pause] <input.txt>
+usage: TalosSigils.exe [--no-pause] [--no-merge] <input.txt>
 
     --no-pause ..... does not wait for a key press at the end (optional)
+    --no-merge ..... turn off optimization of sigils merging (optional)
     <input.txt> .... path to a text file with description of a puzzle
 
     Note: The solution will be printed on the screen and also
