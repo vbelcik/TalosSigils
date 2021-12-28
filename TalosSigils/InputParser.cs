@@ -67,9 +67,9 @@ namespace TalosSigils
         {
             (int, int)[] points = ParseSigilPoints(pattern: section.text);
 
-            if (points.Length == 0)
+            if ((points.Length == 0) || (section.count == 0))
             {
-                // empty sigil encountered
+                // empty sigil (points 0) or unused sigil (count 0) encountered
                 return null;
             }
 
