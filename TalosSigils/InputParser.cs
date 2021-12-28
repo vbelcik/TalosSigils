@@ -10,18 +10,18 @@ namespace TalosSigils
     {
         public static Board Parse(string[] text, bool mergeSigils)
         {
-            string[][] sections = SplitText(text);
+            Section[] sections = SplitTextIntoSections(text);
 
             if (sections.Length == 0)
             {
                 throw new Exception("File sections expected. Every section ends with \"----\" line.");
             }
 
-            (int dim_x, int dim_y) = ParseDim(dimSection: sections[0]);
+            (int dim_x, int dim_y) = ParseDim(dimSectionText: sections[0].text);
 
             Sigil[] sigils = sections
                 .Skip(1)
-                .Select(p => ParseSigil(pattern: p))
+                .Select(ParseSigil)
                 .Where(s => s != null)
                 .Cast<Sigil>()
                 .ToArray();
@@ -36,13 +36,15 @@ namespace TalosSigils
             return new Board(dx: dim_x, dy: dim_y, sigils);
         }
 
-        private static (int dim_x, int dim_y) ParseDim(string[] dimSection)
+        private static (int dim_x, int dim_y) ParseDim(string[] dimSectionText)
         {
             try
             {
-                dimSection = dimSection.Where(ln => !string.IsNullOrWhiteSpace(ln)).ToArray();
+                dimSectionText = dimSectionText
+                    .Where(ln => !string.IsNullOrWhiteSpace(ln))
+                    .ToArray();
 
-                string str_dim = dimSection[0];
+                string str_dim = dimSectionText[0];
                 string[] strArr_dim = str_dim.Split('*');
 
                 if (strArr_dim.Length != 2)
@@ -61,9 +63,9 @@ namespace TalosSigils
             }
         }
 
-        private static Sigil? ParseSigil(string[] pattern)
+        private static Sigil? ParseSigil(Section section)
         {
-            (int, int)[] points = ParseSigilPoints(pattern: pattern);
+            (int, int)[] points = ParseSigilPoints(pattern: section.text);
 
             if (points.Length == 0)
             {
@@ -71,7 +73,7 @@ namespace TalosSigils
                 return null;
             }
 
-            return new Sigil(points: points, count: 1);
+            return new Sigil(points: points, count: section.count);
         }
 
         private static (int, int)[] ParseSigilPoints(string[] pattern)
@@ -105,17 +107,28 @@ namespace TalosSigils
             }
         }
 
-        private static string[][] SplitText(string[] text)
+        private static Section[] SplitTextIntoSections(string[] text)
         {
-            var lstArrs = new List<string[]>();
+            var lstSections = new List<Section>();
             var lst = new List<string>();
+
+            int currentCount = 1;
+            int lineNum = 0;
 
             foreach (string line in text)
             {
+                lineNum++;
+
                 if (IsSeparator(line))
                 {
-                    lstArrs.Add(lst.ToArray());
+                    Section section;
+                    section.count = currentCount;
+                    section.text = lst.ToArray();
+
+                    lstSections.Add(section);
                     lst.Clear();
+
+                    currentCount = ParseSeparatorCount(line, lineNum: lineNum);
                 }
                 else
                 {
@@ -123,9 +136,51 @@ namespace TalosSigils
                 }
             }
 
-            return lstArrs.ToArray();
+            return lstSections.ToArray();
+        }
 
-            static bool IsSeparator(string s) => s.Trim().StartsWith("--");
+        private static bool IsSeparator(string s)
+        {
+            return s.Trim().StartsWith("--");
+        }
+
+        private static int ParseSeparatorCount(string s, int lineNum)
+        {
+            int i = s.IndexOf('(');
+
+            if (i < 0)      // no '(N)'
+            {
+                return 1;   // default count
+            }
+
+            s = s[(i + 1)..];     // skip '...('
+
+            i = s.IndexOf(')');
+
+            if (i < 0)
+            {
+                throw new Exception("Closing ')' missing on line " + lineNum);
+            }
+
+            s = s[..i];     // exclude ')...'
+
+            if (!int.TryParse(s.Trim(), out int count))
+            {
+                throw new Exception("'( count )' expected on line " + lineNum);
+            }
+
+            if (count < 0)
+            {
+                throw new Exception("Negative '( count )' on line " + lineNum);
+            }
+
+            return count;
+        }
+
+        private struct Section
+        {
+            public int count;
+            public string[] text;
         }
     }
 }
