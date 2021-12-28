@@ -1,39 +1,22 @@
 7*8
-----
+---- (2) == count
+xx
+xx
+---- (0)
+ x
+xxx
+---- (3)
 x
 xxx
-----
-x
-xxx
-----
-x
-xxx
-----
+---- (1)
   x
 xxx
-----
-xx
-xx
-----
-xx
-xx
-----
-xxxx
-----
-xxxx
-----
-xxxx
-----
-xxxx
-----
-xxxx
-----
+---- (3)
 xx
  xx
-----
-xx
+---- (0)
  xx
-----
 xx
- xx
+---- (5)
+xxxx
 ----
